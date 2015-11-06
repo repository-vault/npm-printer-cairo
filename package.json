@@ -1,0 +1,23 @@
+{
+  "name": "printer",
+  "version": "1.0.0",
+  "description": "Printer wrapper",
+  "main": "index.js",
+  "scripts": {
+    "test": "node node_modules/istanbul/lib/cli.js  cover node_modules/mocha/bin/_mocha test/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@git.ivsdev.net:3rd/npm-foxit-win32.git"
+  },
+  "keywords": [
+    "foxit"
+  ],
+  "devDependencies": {
+    "expect.js": "^0.3.1",
+    "istanbul": "^0.3.18",
+    "mocha": "^2.2.5"
+  },
+  "author": "Francois Leurent <fleurent@ivsweb.com>",
+  "license": "IVS"
+}
