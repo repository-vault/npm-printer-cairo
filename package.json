@@ -4,7 +4,7 @@
   "description": "Printer wrapper",
   "main": "index.js",
   "scripts": {
-    "test": "node node_modules/istanbul/lib/cli.js  cover node_modules/mocha/bin/_mocha test/"
+    "test": "node node_modules/istanbul/lib/cli.js  cover -x \"lib/*\" node_modules/mocha/bin/_mocha test/"
   },
   "repository": {
     "type": "git",
