@@ -1,32 +1,70 @@
 "use strict";
 
-
 var cp = require('child_process');
 var fs = require('fs');
 var util = require('util');
 var path = require('path');
 
-var some    = require('mout/array/some');
-var printer = require('./lib/printer');
+var tmppath = require('nyks/fs/tmppath');
+
+
+var gsprinter   = path.resolve("./lib/gsprint.exe");
+var ghostscript = path.resolve("./lib/gswin32c.exe");
+
+function getPrinters(chain){
+  var child = cp.spawn(gsprinter, ["-list"]),
+      body = "";
+
+  child.stdout.on("data", function(buf){
+    body += buf;
+  });
+
+  child.on("close", function(exit){
+    if(exit !== 0)
+      return chain("Could not get printer listing");
+
+    chain(null, body.split("\n").map(function(v){ return {name:v.trim()}; }) );
+  });
+}
+
+
+function printPDFBuffer(buffer, printerName, chain) {
+  var tmpbuffer = tmppath("pdf");
+  fs.writeFileSync(tmpbuffer, buffer);
+  printPDF(tmpbuffer, printerName, function(err){
+    fs.unlinkSync(tmpbuffer);
+    chain(err);
+  });
+}
+
 
 function printPDF(source_file, printerName, chain) {
   if (!fs.existsSync(source_file))
     return chain('unexisting file');
-  var buffer = fs.readFileSync(source_file);
-  printer.printDirect({
-    printer : printerName,
-    data: buffer,
-    type: 'RAW',
-    success: function(id) {
-      console.log('printed with id ' + id);
-      chain(null);
-    },
-    error: function(err) {
-      console.error('error on printing: ' + err);
-      return chain(err);
-    }
+
+  var args = ["-printer", printerName, "-ghostscript", ghostscript, source_file ];
+  args.push("-colour");
+
+  var child = cp.spawn(gsprinter, args),
+      body = "";
+
+  child.stdout.on("data", function(buf){
+    console.log("OUT>" + buf);
   });
+
+  child.stderr.on("data", function(buf){
+    console.log("ERR>" + buf);
+  });
+
+  child.on("close", function(exit){
+    if(exit !== 0)
+      return chain("Call to gsprint failed !");
+    return chain();
+  });
+
+  
 }
 
-module.exports.printPDF    = printPDF;
-module.exports.getPrinters = printer.getPrinters;
+module.exports.printPDF         = printPDF;
+module.exports.printPDFBuffer   = printPDFBuffer;
+module.exports.getPrinters      = getPrinters;
