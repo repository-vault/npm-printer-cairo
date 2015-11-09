@@ -28,22 +28,28 @@ function getPrinters(chain){
 }
 
 
-function printPDFBuffer(buffer, printerName, chain) {
+function printPDFBuffer(buffer, options, chain) {
   var tmpbuffer = tmppath("pdf");
   fs.writeFileSync(tmpbuffer, buffer);
-  printPDF(tmpbuffer, printerName, function(err){
+  printPDF(tmpbuffer, options, function(err){
     fs.unlinkSync(tmpbuffer);
     chain(err);
   });
 }
 
 
-function printPDF(source_file, printerName, chain) {
+function printPDF(source_file, options, chain) {
+  if(typeof options == "string")
+    options = {printerName : options };
+
   if (!fs.existsSync(source_file))
     return chain('unexisting file');
 
-  var args = ["-printer", printerName, "-ghostscript", ghostscript, source_file ];
+  var args = ["-printer", options.printerName, "-ghostscript", ghostscript, source_file ];
   args.push("-colour");
+
+  if(options.orientation) //valid are portrait / landscape
+    args.push("-" + options.orientation);
 
   var child = cp.spawn(gsprinter, args),
       body = "";

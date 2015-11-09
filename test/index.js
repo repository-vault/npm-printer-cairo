@@ -6,8 +6,10 @@ var some    = require('mout/array/some');
 var path = require('path');
 
 //var printer = require('printer');
-var printerName = "PDFCreator";
-
+var printerName = '\\\\ivsfrsrv-ad1\\imprimante DEVELWEB';
+printerName = 'Foxit PhantomPDF Printer';
+var test_pdf = "foo.pdf";
+test_pdf = "Ruler_A4.pdf";
 
 describe("Initial test suite", function(){
 
@@ -37,7 +39,7 @@ describe("Initial test suite", function(){
       fs.unlinkSync(output_path);
 
     console.log("Make sure to save the file as '%s'", output_path);
-    var source_file = path.resolve(__dirname, "foo.pdf");
+    var source_file = path.resolve(__dirname, test_pdf);
     printer.printPDF(source_file, printerName, function(err) {
       expect(err).not.to.be.ok();
       
