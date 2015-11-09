@@ -1,3 +1,5 @@
 node_modules
 test/incoming.pdf
+test/incoming_buffer.pdf
+test/incoming_options.pdf
 coverage
