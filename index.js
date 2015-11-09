@@ -8,8 +8,8 @@ var path = require('path');
 var tmppath = require('nyks/fs/tmppath');
 
 
-var gsprinter   = path.resolve("./lib/gsprint.exe");
-var ghostscript = path.resolve("./lib/gswin32c.exe");
+var gsprinter   = path.resolve(__dirname + "/lib/gsprint.exe");
+var ghostscript = path.resolve(__dirname + "/lib/gswin32c.exe");
 
 function getPrinters(chain){
   var child = cp.spawn(gsprinter, ["-list"]),
