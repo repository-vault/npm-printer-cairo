@@ -12,6 +12,14 @@ var expect = require('expect.js'),
 
 describe("Initial test suite", function(){
 
+  it("should list printers", function(chain) {
+    printer.getPrinters(function(err, printers) {
+      expect(err).not.to.be.ok();
+      expect(printers).to.be.a('object');
+      chain();
+    });
+  });
+
   it("should check for printer existance", function(chain){
     printer.getPrinters(function(err, printers) {
 
@@ -27,7 +35,7 @@ describe("Initial test suite", function(){
     printer.printPDF(source_file, printerName, function(err) {
       expect(err).to.be.a('string');
       chain();
-    }); 
+    });
   });
 
   it("Should print something", function(chain){
@@ -94,6 +102,5 @@ describe("Initial test suite", function(){
       }, 200);
     });
   });
-
 
 });
