@@ -29,6 +29,9 @@ function getPrinters(chain){
 
 
 function printPDFBuffer(buffer, options, chain) {
+  if(typeof options == "string")
+    options = {printer_name : options};
+
   var tmpbuffer = tmppath("pdf");
   fs.writeFileSync(tmpbuffer, buffer);
   printPDF(tmpbuffer, options, function(err){
@@ -40,12 +43,12 @@ function printPDFBuffer(buffer, options, chain) {
 
 function printPDF(source_file, options, chain) {
   if(typeof options == "string")
-    options = {printerName : options };
+    options = {printer_name : options};
 
   if (!fs.existsSync(source_file))
     return chain('unexisting file');
 
-  var args = ["-printer", options.printerName, "-ghostscript", ghostscript, source_file ];
+  var args = ["-printer", options.printer_name, "-ghostscript", ghostscript, source_file];
   args.push("-colour");
 
   if(options.orientation) //valid are portrait / landscape
