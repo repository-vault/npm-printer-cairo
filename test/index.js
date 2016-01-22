@@ -3,8 +3,12 @@ var expect = require('expect.js'),
     fs = require('fs'),
     printer = require('..'),
     some    = require('mout/array/some'),
+    intersection    = require('mout/array/intersection'),
+    pluck    = require('mout/object/pluck'),
+    values    = require('mout/object/values'),
     path = require('path'),
-    printerName = 'PDFCreator',
+    printersName = ['PDFCreator', 'doPDF v7'],// 'Foxit PhantomPDF Printer'],
+    printerName = null,
     test_pdf = "foo.pdf";
 
 //var printerName = '\\\\ivsfrsrv-ad1\\imprimante DEVELWEB';
@@ -16,15 +20,20 @@ describe("Initial test suite", function(){
     printer.getPrinters(function(err, printers) {
       expect(err).not.to.be.ok();
       expect(printers).to.be.a('object');
+      console.log("Current printer lists", printers);
       chain();
     });
   });
 
   it("should check for printer existance", function(chain){
     printer.getPrinters(function(err, printers) {
-
-      if(!some(printers, function(printer){ return printer.name == printerName; })) 
+      printers = values(pluck(printers, 'name'));
+      printerName = intersection(printers, printersName)[0];
+      if(!printerName) 
         throw "Cannot find PDF printer (required for testing), please download one (we recommend http://azure.download.pdfforge.org/pdfcreator/2.2.1/PDFCreator-2_2_1-setup.exe";
+
+
+      console.log("Working with printer '%s'", printerName);
       chain();
     });
   });
