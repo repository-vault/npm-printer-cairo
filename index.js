@@ -54,7 +54,7 @@ function printPDF(source_file, options, chain) {
 
       fs.unlinkSync(cmyk_pdf);
 
-      chain();
+      chain(null);
     });
   });
 }
@@ -89,7 +89,7 @@ function convertPDFtocmyk(source_file, chain) {
         "-dBATCH",
         "-sDEVICE=pdfwrite",
         "-dNOPAUSE",
-        "-sOutputFile=\"" + output_pdf + "\"",
+        "-sOutputFile=" + output_pdf,
         "-dUseCIEColor",
         "-sProcessColorModel=DeviceRGB",
         "-dProcessColorModel=/DeviceCMYK",

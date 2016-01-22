@@ -97,7 +97,7 @@ describe("Initial test suite", function(){
     console.log("Make sure to save the file as '%s'", output_path);
     var source_file = path.resolve(__dirname, test_pdf),
         options = {
-          printerName : printerName,
+          printer_name : printerName,
           orientation : 'landscape'
         };
     printer.printPDF(source_file, options, function(err) {
