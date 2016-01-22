@@ -46,12 +46,20 @@ function printPDF(source_file, options, chain) {
   if (!fs.existsSync(source_file))
     return chain('unexisting file');
 
-  convertPDFtoCMYB(source_file, function(source_pdf) {
-    print_cmyb_pdf(source_pdf, options, chain);
+  convertPDFtocmyk(source_file, function(err, cmyk_pdf) {
+    if(err) return chain(err);
+
+    print_cmyk_pdf(cmyk_pdf, options, function(err2){
+      if(err2) return chain(err2);
+
+      fs.unlinkSync(cmyk_pdf);
+
+      chain(null);
+    });
   });
 }
 
-function print_cmyb_pdf(source_file, options, chain) {
+function print_cmyk_pdf(source_file, options, chain) {
   var args = [
     "-printer",
     options.printer_name,
@@ -64,16 +72,9 @@ function print_cmyb_pdf(source_file, options, chain) {
   if(options.orientation) //valid are portrait / landscape
     args.push("-" + options.orientation);
 
-  var child = cp.spawn(gsprinter, args),
-      body = "";
+  var child = cp.spawn(gsprinter, args);
 
-  child.stdout.on("data", function(buf){
-    console.log("OUT>" + buf);
-  });
-
-  child.stderr.on("data", function(buf){
-    console.log("ERR>" + buf);
-  });
+  child.on('error', chain);
 
   child.on("close", function(exit){
     if(exit !== 0)
@@ -82,13 +83,13 @@ function print_cmyb_pdf(source_file, options, chain) {
   });
 }
 
-function convertPDFtoCMYB(source_file, chain) {
-  var source_pdf = source_file.replace('.pdf', '_cmyb.pdf'),
+function convertPDFtocmyk(source_file, chain) {
+  var output_pdf = source_file + ".cmyk.pdf",
       args = [
         "-dBATCH",
         "-sDEVICE=pdfwrite",
         "-dNOPAUSE",
-        "-sOutputFile=" + source_pdf,
+        "-sOutputFile=" + output_pdf,
         "-dUseCIEColor",
         "-sProcessColorModel=DeviceRGB",
         "-dProcessColorModel=/DeviceCMYK",
@@ -97,25 +98,17 @@ function convertPDFtoCMYB(source_file, chain) {
         "-c",
         "quit"
       ],
-      child = cp.spawn(ghostscript, args),
-      body = "";
+      child = cp.spawn(ghostscript, args);
 
-  child.stdout.on("data", function(buf){
-    console.log("OUT>" + buf);
-  });
-
-  child.stderr.on("data", function(buf){
-    console.log("ERR>" + buf);
-  });
+  child.on('error', chain);
 
   child.on("close", function(exit){
     if(exit !== 0)
       return chain("Call to gswin32c failed !");
-    return chain(source_pdf);
+    return chain(null, output_pdf);
   });
 }
 
 module.exports.printPDF         = printPDF;
 module.exports.printPDFBuffer   = printPDFBuffer;
 module.exports.getPrinters      = getPrinters;
-module.exports.convertPDFtoCMYB = convertPDFtoCMYB;
