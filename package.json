@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@git.ivsdev.net:3rd/npm-foxit-win32.git"
+    "url": "git@git.ivsdev.net:3rd/npm-printer.git"
   },
   "keywords": [
     "foxit"
