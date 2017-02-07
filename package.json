@@ -2,6 +2,7 @@
   "name": "printer",
   "version": "1.0.0",
   "description": "Printer wrapper",
+  "private":true,
   "main": "index.js",
   "scripts": {
     "test": "node node_modules/istanbul/lib/cli.js  cover -x \"lib/*\" node_modules/mocha/bin/_mocha test/"
@@ -19,5 +20,7 @@
     "mocha": "^2.2.5"
   },
   "author": "Francois Leurent <fleurent@ivsweb.com>",
-  "license": "IVS"
+  "license": "IVS",
+  "dependencies": {
+  }
 }
