@@ -1,18 +1,23 @@
 {
-  "name": "printer",
+  "name": "printer-cairio",
   "version": "1.1.0",
-  "description": "Printer wrapper",
-  "private": true,
+  "description": "Cairo printer wrapper (win32)",
   "main": "index.js",
   "scripts": {
     "test": "node node_modules/istanbul/lib/cli.js  cover -x \"lib/*\" node_modules/mocha/bin/_mocha test/"
   },
   "repository": {
     "type": "git",
-    "url": "git@git.ivsdev.net:3rd/npm-printer.git"
+    "url": "git@github.com:131/npm-printer-cairo.git"
   },
+  "os": [
+    "win32"
+  ],
   "keywords": [
-    "foxit"
+    "pdf",
+    "printer",
+    "cairo",
+    "gsprint"
   ],
   "devDependencies": {
     "expect.js": "^0.3.1",

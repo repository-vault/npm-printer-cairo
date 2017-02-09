@@ -1,15 +1,20 @@
 "use strict";
-var expect = require('expect.js'),
-    fs = require('fs'),
-    printer = require('..'),
-    some    = require('mout/array/some'),
-    intersection    = require('mout/array/intersection'),
-    pluck    = require('mout/object/pluck'),
-    values    = require('mout/object/values'),
-    path = require('path'),
-    printersName = ['PDFCreator', 'doPDF v7'],// 'Foxit PhantomPDF Printer'],
-    printerName = null,
-    test_pdf = "foo.pdf";
+
+const fs   = require('fs');
+const path = require('path');
+
+const some          = require('mout/array/some');
+const intersection  = require('mout/array/intersection');
+const pluck         = require('mout/object/pluck');
+const values        = require('mout/object/values');
+
+const printersName = ['PDFCreator', 'doPDF v7'];// 'Foxit PhantomPDF Printer'],
+
+const expect = require('expect.js');
+const printer = require('..');
+
+var printerName = null;
+var test_pdf = "foo.pdf";
 
 //var printerName = '\\\\ivsfrsrv-ad1\\imprimante DEVELWEB';
 //test_pdf = "Ruler_A4.pdf";
@@ -56,27 +61,6 @@ describe("Initial test suite", function(){
     console.log("Make sure to save the file as '%s'", output_path);
     var source_file = path.resolve(__dirname, test_pdf);
     printer.printPDF(source_file, printerName, function(err) {
-      expect(err).not.to.be.ok();
-
-     var i = setInterval(function(){
-        if(!fs.existsSync(output_path))
-          return;
-        clearInterval(i);
-        chain();
-      }, 200);
-    });
-  });
-
-  it ("should print a buffered pdf", function(chain) {
-    this.timeout(30000);
-    var output_path = path.join(__dirname, "incoming_buffer.pdf");
-    if(fs.existsSync(output_path))
-      fs.unlinkSync(output_path);
-
-    console.log("Make sure to save the file as '%s'", output_path);
-    var source_file = path.resolve(__dirname, test_pdf),
-        buffer = fs.readFileSync(source_file);
-    printer.printPDFBuffer(buffer, printerName, function(err) {
       expect(err).not.to.be.ok();
 
      var i = setInterval(function(){

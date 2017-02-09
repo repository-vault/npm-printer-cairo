@@ -1,13 +1,12 @@
 "use strict";
 
-var cp      = require('child_process'),
-    fs      = require('fs'),
-    util    = require('util'),
-    path    = require('path');
+const cp      = require('child_process');
+const path    = require('path');
 
 
-var gsprinter   = path.resolve(__dirname + "/lib/gsprint.exe"),
-    pdftocairo  = path.resolve(__dirname + "/lib/pdftocairo.exe");
+const gsprinter   = path.resolve(__dirname + "/lib/gsprint.exe");
+const pdftocairo  = path.resolve(__dirname + "/lib/pdftocairo.exe");
+
 
 function getPrinters(chain){
   var child = cp.spawn(gsprinter, ["-list"]),
