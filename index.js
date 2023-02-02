@@ -3,22 +3,24 @@
 const cp      = require('child_process');
 const path    = require('path');
 
+const drain   = require('nyks/stream/drain');
+
 
 const gsprinter   = path.resolve(__dirname + "/lib/gsprint.exe");
 const pdftocairo  = path.resolve(__dirname + "/lib/pdftocairo.exe");
 
 
-function getPrinters(chain){
+async function getPrinters(chain) {
   var child = cp.spawn(gsprinter, ["-list"]),
-      body = "";
+      body = [];
 
-  child.stdout.on("data", function(buf){
-    body += buf;
-  });
+  child.stdout.on('data', (buff) => body.push(buff));
 
-  child.on("close", function(exit){
+  child.on('close', function(exit) {
     if(exit !== 0)
       return chain("Could not get printer listing");
+
+    body = Buffer.concat(body).toString('binary');
 
     chain(null, body.split("\n").map(function(v){ return {name:v.trim()}; }) );
   });

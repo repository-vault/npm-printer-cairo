@@ -26,5 +26,7 @@
   },
   "author": "Francois Leurent <fleurent@ivsweb.com>",
   "license": "IVS",
-  "dependencies": {}
+  "dependencies": {
+    "nyks": "^6.8.0"
+  }
 }
