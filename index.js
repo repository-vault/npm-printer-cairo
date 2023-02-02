@@ -3,14 +3,11 @@
 const cp      = require('child_process');
 const path    = require('path');
 
-const drain   = require('nyks/stream/drain');
-
-
 const gsprinter   = path.resolve(__dirname + "/lib/gsprint.exe");
 const pdftocairo  = path.resolve(__dirname + "/lib/pdftocairo.exe");
 
 
-async function getPrinters(chain) {
+function getPrinters(chain) {
   var child = cp.spawn(gsprinter, ["-list"]),
       body = [];
 
